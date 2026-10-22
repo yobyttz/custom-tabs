@@ -3,16 +3,15 @@
 #include <optional>
 
 #include "mod/Config.h"
-
 #include <pl/Mod.hpp>
 
-namespace clange_me {
+namespace custom_tabs {
 
-class ClangeMeMod {
+class CustomTabsMod {
   public:
-    static ClangeMeMod &instance();
+    static CustomTabsMod &instance();
 
-    ClangeMeMod();
+    CustomTabsMod();
 
     [[nodiscard]] ll::mod::NativeMod &getSelf() const { return mSelf; }
 
@@ -25,6 +24,8 @@ class ClangeMeMod {
     ll::mod::NativeMod &mSelf;
     ModConfig mConfig;
     std::optional<pl::config::ConfigFile<ModConfig>> mConfigFile;
+
+    void probeMinecraft();
 };
 
-} // namespace clange_me
+} // namespace custom_tabs
