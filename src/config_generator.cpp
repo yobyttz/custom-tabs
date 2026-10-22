@@ -33,9 +33,9 @@ int main(int argc, char **argv) {
     }
 
     const std::filesystem::path outputDir = argv[1];
-    if (!writeJson(outputDir / "config.json", clange_me::makeDefaultConfigJson()))
+    if (!writeJson(outputDir / "config.json", tabs::makeDefaultConfigJson()))
         return 1;
-    if (!writeJson(outputDir / "config.schema.json", clange_me::makeConfigSchemaJson()))
+    if (!writeJson(outputDir / "config.schema.json", tabs::makeConfigSchemaJson()))
         return 1;
 
     return 0;
