@@ -5,7 +5,7 @@
 
 #include <pl/Mod.hpp>
 
-namespace custom_tabs {
+namespace tabs {
 
 CustomTabsMod &CustomTabsMod::instance() {
     static CustomTabsMod instance;
