@@ -5,7 +5,7 @@
 #include "mod/Config.h"
 #include <pl/Mod.hpp>
 
-namespace custom_tabs {
+namespace tabs {
 
 class CustomTabsMod {
   public:
