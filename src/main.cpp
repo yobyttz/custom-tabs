@@ -1,5 +1,5 @@
 #include "mod/MyMod.h"
-
 #include <pl/Mod.hpp>
 
-PL_REGISTER_MOD(clange_me::ClangeMeMod, clange_me::ClangeMeMod::instance());
+// Si el template usa clange_me::ClangeMeMod, cámbialo a:
+PL_REGISTER_MOD(custom_tabs::CustomTabsMod, custom_tabs::CustomTabsMod::instance())
