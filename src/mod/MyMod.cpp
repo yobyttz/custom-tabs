@@ -1,71 +1,76 @@
 #include "mod/MyMod.h"
 
+#include <dlfcn.h>
 #include <filesystem>
 
 #include <pl/Mod.hpp>
 
-namespace clange_me {
+namespace custom_tabs {
 
-ClangeMeMod &ClangeMeMod::instance() {
-    static ClangeMeMod instance;
+CustomTabsMod &CustomTabsMod::instance() {
+    static CustomTabsMod instance;
     return instance;
 }
 
-ClangeMeMod::ClangeMeMod() : mSelf(*ll::mod::NativeMod::current()) {}
+CustomTabsMod::CustomTabsMod() : mSelf(*ll::mod::NativeMod::current()) {}
 
-bool ClangeMeMod::load() {
+void CustomTabsMod::probeMinecraft() {
+    auto &log = getSelf().getLogger();
+
+    // Offsets de strings en libminecraftpe.so 1.26.52.3 (solo referencia; NO son hooks)
+    // construction_tab  0x2758437
+    // equipment_tab     0x2527807
+    // nature_tab        0x2527815
+    // items_tab         0x25bdc36
+    // search_tab        0x2492a88
+    // CreativeItemGroupCategory  0x33349e7
+
+    void *mc = dlopen("libminecraftpe.so", RTLD_NOLOAD | RTLD_LAZY);
+    if (mc) {
+        log.info("libminecraftpe.so ya está cargada");
+        // TODO: cuando tengas signature de fill creativo:
+        // auto addr = pl::memory::resolveSignature("XX XX ?? ...", "libminecraftpe.so");
+        // pl::memory::hook(...);
+    } else {
+        log.warn("libminecraftpe.so aún no cargada (normal en load/enable temprano)");
+    }
+}
+
+bool CustomTabsMod::load() {
     auto &self = getSelf();
-    self.getLogger().debug("Loading...");
+    self.getLogger().info("CustomTabs: load()");
 
     std::error_code ec;
     std::filesystem::create_directories(self.getDataDir(), ec);
-    if (ec) {
-        self.getLogger().error("Failed to create data directory {}: {}", self.getDataDir().string(),
-                               ec.message());
-        return false;
-    }
-
     std::filesystem::create_directories(self.getConfigDir(), ec);
-    if (ec) {
-        self.getLogger().error("Failed to create config directory {}: {}",
-                               self.getConfigDir().string(), ec.message());
-        return false;
-    }
 
     mConfigFile.emplace();
     if (!mConfigFile->load()) {
-        self.getLogger().warn("Failed to load typed config");
+        self.getLogger().warn("No se pudo cargar config");
         return false;
     }
     mConfig = mConfigFile->value();
-
-    self.getLogger().info("Loaded {} from {}", self.getName(), self.getModDir().string());
     return true;
 }
 
-bool ClangeMeMod::enable() {
+bool CustomTabsMod::enable() {
     auto &self = getSelf();
-    self.getLogger().debug("Enabling...");
-    if (!mConfig.enabled) {
-        self.getLogger().info("clange_me is disabled by config");
-        return true;
-    }
-
-    self.getLogger().info("Config message: {}", mConfig.message);
+    self.getLogger().info("CustomTabs: enable()");
+    probeMinecraft();
+    // Las tabs visuales van en resource pack / JSON UI.
+    // Aquí irá el hook de ítems cuando haya signature.
     return true;
 }
 
-bool ClangeMeMod::disable() {
-    getSelf().getLogger().debug("Disabling...");
-    // Undo enable-time state here.
+bool CustomTabsMod::disable() {
+    getSelf().getLogger().info("CustomTabs: disable()");
     return true;
 }
 
-bool ClangeMeMod::unload() {
-    getSelf().getLogger().debug("Unloading...");
-    // Release load-time resources here.
+bool CustomTabsMod::unload() {
+    getSelf().getLogger().info("CustomTabs: unload()");
     mConfigFile.reset();
     return true;
 }
 
-} // namespace clange_me
+} // namespace custom_tabs
