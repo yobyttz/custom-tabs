@@ -18,7 +18,7 @@ nlohmann::json makeConfigSchemaJson();
 
 } // namespace clange_me
 
-template <> struct pl::config::Schema<clange_me::ModConfig> {
+template <> struct pl::config::Schema<tabs::ModConfig> {
     static constexpr std::string_view title = "tabs Config";
     static constexpr std::string_view description = {};
 
