@@ -2,4 +2,4 @@
 #include <pl/Mod.hpp>
 
 // Si el template usa clange_me::ClangeMeMod, cámbialo a:
-PL_REGISTER_MOD(tabs::tabs, tabs::tabs::instance());
+PL_REGISTER_MOD(tabs::CustomTabsMod, tabs::CustomTabsMod::instance());
