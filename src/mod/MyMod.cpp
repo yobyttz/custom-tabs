@@ -58,7 +58,7 @@ bool CustomTabsMod::enable() {
     log.info("CustomTabs: enable()");
 
     const char *pattern =
-        "PEGA_AQUI_EL_PATRON";  // ej: "FF 83 01 39 ?? ?? 00 34"
+        "83 F9 FF 75 08 48 8D 05 ?? ?? ?? ?? ";  // ej: "FF 83 01 39 ?? ?? 00 34"
 
     auto addr = pl::memory::resolveSignature(pattern, "libminecraftpe.so");
 
