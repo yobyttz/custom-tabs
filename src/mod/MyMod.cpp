@@ -1,5 +1,5 @@
 #include "mod/MyMod.h"
-
+#include <pl/memory/Signature.hpp>
 #include <dlfcn.h>
 #include <filesystem>
 
@@ -54,6 +54,20 @@ bool CustomTabsMod::load() {
 }
 
 bool CustomTabsMod::enable() {
+    auto &log = getSelf().getLogger();
+    log.info("CustomTabs: enable()");
+
+    const char *pattern =
+        "PEGA_AQUI_EL_PATRON";  // ej: "FF 83 01 39 ?? ?? 00 34"
+
+    auto addr = pl::memory::resolveSignature(pattern, "libminecraftpe.so");
+
+    if (addr == 0) {
+        log.error("Signature NO encontrada");
+    } else {
+        log.info("Signature OK -> {}", reinterpret_cast<void *>(addr));
+    }
+
     auto &self = getSelf();
     self.getLogger().info("CustomTabs: enable()");
     probeMinecraft();
